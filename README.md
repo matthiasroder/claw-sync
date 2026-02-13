@@ -75,15 +75,12 @@ git push -u origin "$branch"
 git checkout main
 ```
 
-### 5. (Optional) Auto-pull at session start
+### 5. Install the workspace-pull hook
 
-If your OpenClaw installation supports the `workspace-pull` hook, enable it so the agent always starts with the latest `main`:
+This hook pulls the latest `main` before each session starts, so the agent always begins with the most recent synced state. Copy it from this repo into your OpenClaw hooks directory:
 
-```yaml
-# config.yaml
-hooks:
-  workspace-pull:
-    enabled: true
+```bash
+cp -r ~/.openclaw/workspace/skills/claw-sync/hooks/workspace-pull ~/.openclaw/hooks/
 ```
 
 ## Configure your agent
