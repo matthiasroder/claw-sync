@@ -7,57 +7,6 @@ description: Sync OpenClaw workspace files between multiple machines via GitHub 
 
 Sync your OpenClaw workspace across multiple machines using GitHub PRs.
 
-## Overview
-
-Each machine has its own branch. Changes merge into `main` via PRs. After merging, all branches reset to `main` — keeping every installation in sync.
-
-## Setup
-
-### 1. Create a private GitHub repo for your workspace
-
-```bash
-cd ~/.openclaw/workspace
-git init
-git remote add origin git@github.com:YOUR_USERNAME/YOUR_REPO.git
-```
-
-### 2. Configure each machine's branch identity
-
-On each machine, set a unique branch name:
-
-```bash
-git config openclaw.branch "macbook"    # on your MacBook
-git config openclaw.branch "server"     # on your server
-git config openclaw.branch "work-pc"    # on your work PC
-```
-
-### 3. Create and push each branch
-
-```bash
-branch=$(git config openclaw.branch)
-git checkout -b "$branch"
-git add -A && git commit -m "Initial commit"
-git push -u origin "$branch"
-```
-
-### 4. Create main branch
-
-```bash
-git checkout -b main
-git push -u origin main
-```
-
-### 5. (Optional) Auto-pull main at session start
-
-Add to your OpenClaw hooks to stay current:
-
-```yaml
-# config.yaml
-hooks:
-  workspace-pull:
-    enabled: true
-```
-
 ## Sync Workflow
 
 When the user asks to sync:
@@ -113,8 +62,6 @@ After all PRs merged:
 git checkout main && git pull origin main
 
 # Push main to all machine branches
-git push origin main:macbook main:server main:work-pc
-# Or dynamically:
 for branch in $(git branch -r | grep -v main | grep -v HEAD | sed 's|origin/||'); do
   git push origin main:"$branch"
 done
@@ -132,13 +79,6 @@ When resolving conflicts in workspace files:
 | Conflicting information | **Ask the user** — don't guess |
 | Environment-specific content | Keep both, clearly labeled per machine |
 | Uncertain about anything | **Ask the user** — never silently discard |
-
-## Tips
-
-- **Commit often** — small commits are easier to merge
-- **Sync regularly** — reduces conflict complexity
-- **Memory files** — most amenable to "combine both" resolution
-- **Config files** — most likely to need machine-specific sections
 
 ## Requirements
 
