@@ -18,23 +18,14 @@ macbook ──commits──► origin/macbook ──PR──► main ◄──PR
                                   (in sync)        (in sync)
 ```
 
-## Prerequisites
+## Installation
 
+You'll need:
 - **git** with SSH access to GitHub
 - **[GitHub CLI](https://cli.github.com/)** (`gh`) — authenticated via `gh auth login`
 - A **private GitHub repo** to store your workspace
 
-## Installation
-
-Copy `SKILL.md` into your workspace skills directory:
-
-```bash
-mkdir -p ~/.openclaw/workspace/skills/claw-sync
-curl -o ~/.openclaw/workspace/skills/claw-sync/SKILL.md \
-  https://raw.githubusercontent.com/matthiasroder/claw-sync/main/SKILL.md
-```
-
-Or clone the repo:
+Clone the skill into your workspace:
 
 ```bash
 cd ~/.openclaw/workspace/skills
@@ -93,6 +84,27 @@ hooks:
   workspace-pull:
     enabled: true
 ```
+
+## Configure your agent
+
+Add a **Workspace Sync** section to your `AGENTS.md` (or equivalent agent instructions file). This tells the agent how to commit changes to its machine's branch during normal use, and where to find the sync skill when you ask for it.
+
+```markdown
+## Workspace Sync
+
+This workspace is synced between installations via GitHub. Each installation
+has its own branch. `main` is the merged canonical state.
+
+- **Session start:** Automated via `workspace-pull` hook (fetches + checks out `main`)
+- **After modifying workspace files:** Commit and push to your branch:
+  ```bash
+  branch=$(git config openclaw.branch)
+  git checkout "$branch" && git add -A && git commit -m "Update $(date +%Y-%m-%d)" && git push origin "$branch" && git checkout main
+  ```
+- **To sync installations:** User says "sync workspaces" → see `skills/claw-sync/SKILL.md`
+```
+
+Without this, the agent won't know to commit workspace changes to the machine branch, and the sync skill won't have anything to merge.
 
 ## Worked example
 
