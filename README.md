@@ -18,12 +18,13 @@ macbook ──commits──► origin/macbook ──PR──► main ◄──PR
                                   (in sync)        (in sync)
 ```
 
-## Installation
+## Prerequisites
 
-You'll need:
 - **git** with SSH access to GitHub
 - **[GitHub CLI](https://cli.github.com/)** (`gh`) — authenticated via `gh auth login`
 - A **private GitHub repo** to store your workspace
+
+## Installation
 
 Clone the skill into your workspace:
 
