@@ -98,7 +98,6 @@ has its own branch. `main` is the merged canonical state.
   ```bash
   branch=$(git config openclaw.branch)
   git checkout "$branch" && git add -A && git commit -m "Update $(date +%Y-%m-%d)" && git push origin "$branch" && git checkout main
-  ```
 - **To sync installations:** User says "sync workspaces" → see `skills/claw-sync/SKILL.md`
 ```
 
